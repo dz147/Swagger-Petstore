@@ -1462,7 +1462,7 @@
     </column>
     <column id="361" parent="340" name="photoUrls">
       <Position>4</Position>
-      <DataType>varchar(20)|0</DataType>
+      <DataType>varchar(400)|0</DataType>
       <DefaultExpression>&apos;NULL&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>

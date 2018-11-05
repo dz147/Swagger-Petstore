@@ -23,72 +23,80 @@ public class controller {
     @Autowired
     private PetMapper petMapper;
 
-    @RequestMapping(value = "/u")
-    public String emp01(Model model){
-        List<User> users = userMapper.selectAll();
-        model.addAttribute("user",users);
-        return "user";
+    @RequestMapping(value = "/pet")
+    public String emp01(Model model) {
+        List<Pet> pets = petMapper.selectAll();
+        model.addAttribute("pets", pets);
+        return "pet";
     }
 
     //添加宠物 POST方式 JSON格式
     @RequestMapping(value = "/petAdd", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody
-    public String petAdd(@RequestBody Pet pet, BindingResult result){
-        if(result.hasErrors()){
+    public String petAdd(@RequestBody Pet pet, BindingResult result) {
+        if (result.hasErrors()) {
             return "{\"msg\":\"405\",\"cause\":\"添加失败,无效的输入\"}";
         }
         int insert = petMapper.insert(pet);
-        return "redirect:/pet";
+        if (insert > 0) {
+            return "{\"msg\":\"succeed\"}";
+        } else {
+            return "{\"msg\":\"error\"}";
+        }
     }
 
 
     //修改宠物宠物 PUT方式 JSON格式
-    @RequestMapping(value = "/petUpdate", method = RequestMethod.PUT, produces = "application/json")
+    @RequestMapping(value = "/petUpdate", method = RequestMethod.PUT, produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String petUpdate(@RequestBody Pet pet,BindingResult result){
-        if(result.hasErrors()){
+    public String petUpdate(@RequestBody Pet pet, BindingResult result) {
+        if (result.hasErrors()) {
             return "{\"msg\":\"405\",\"cause\":\"修改失败,无效的输入\"}";
         }
-        petMapper.updateByPrimaryKey(pet);
-        return "redirect:/pet";
+        int up = petMapper.updateByPrimaryKey(pet);
+        if (up > 0) {
+            return "{\"msg\":\"修改成功\"}";
+        }
+        return "{\"msg\":\"修改失败\"}";
     }
 
     //通过状态查找宠物
-    @RequestMapping(value = "/getByStatus/status",method = RequestMethod.GET)
-    public String getByStatus(Model model, String status){
+    @RequestMapping(value = "/getByStatus/status", method = RequestMethod.GET)
+    public String getByStatus(Model model, String status) {
         List<Pet> pets = petMapper.selectByStatus(status);
-        model.addAttribute(pets);
-        return "redirect:/pet";
+        model.addAttribute("pets", pets);
+        return "pet";
     }
 
     //通过ID查找宠物
-    @RequestMapping(value = "/getPetById/{id}",method = RequestMethod.GET )
-    public String getPetById(Model model,@PathVariable("id")int id){
+    @RequestMapping(value = "/getPetById/{id}", method = RequestMethod.GET)
+    public String getPetById(Model model, @PathVariable("id") int id) {
         Pet pet = petMapper.selectByPrimaryKey(id);
-        model.addAttribute(pet);
-        return "redirect:/pet";
+        model.addAttribute("pets", pet);
+        return "pet_Update";
     }
 
-    //form表单POST提交通过ID更新现有宠物
-    @RequestMapping(value = "/UpPet/{id}",method = RequestMethod.POST )
-    public String getUpdateById(Model model,@PathVariable("id")int id){
+    //更新现有宠物
+    @RequestMapping(value = "/UpPet/{id}", method = RequestMethod.PUT)
+    public String getUpdateById(Model model, @PathVariable("id") int id) {
         Pet pet = petMapper.selectByPrimaryKey(id);
-        model.addAttribute("pet",pet);
+        model.addAttribute("pet", pet);
         return "redirect:/pet";
     }
 
 
     //删除一个宠物
-    @RequestMapping(value = "/delPet/{id}",method = RequestMethod.DELETE )
-    public String getDeleteById(Model model,@PathVariable("id")int id){
-       petMapper.deleteByPrimaryKey(id);
-        return "redirect:/pet";
+    @RequestMapping(value = "/delPet/{id}", method = RequestMethod.DELETE,produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String getDeleteById(Model model, @PathVariable("id") int id) {
+        petMapper.deleteByPrimaryKey(id);
+        return "{\"msg\":\"删除成功\"}";
     }
 
     //删除一个宠物
     @RequestMapping(value = "/UploadImage/{id}", method = RequestMethod.PUT, produces = "application/json")
     @ResponseBody
-    public String getUploadImage(Model model,@PathVariable("id")int id,@RequestBody Pet pet){
+    public String getUploadImage(Model model, @PathVariable("id") int id, @RequestBody Pet pet) {
 
         return "redirect:/pet";
     }

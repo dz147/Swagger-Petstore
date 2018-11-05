@@ -14,14 +14,14 @@
     delete from orders
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.dz147.entity.Orders">
-    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Integer">
+  <insert id="insert" parameterType="com.dz147.entity.Orders" useGeneratedKeys="true" keyColumn="id">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Integer" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into orders (id, petId, userId, 
+    insert into orders (petId, userId,
       quantity, shipDate, status, 
       complete)
-    values (#{id,jdbcType=INTEGER}, #{petId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, 
+    values (#{petId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER},
       #{quantity,jdbcType=INTEGER}, #{shipDate,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}, 
       #{complete,jdbcType=BIT})
   </insert>

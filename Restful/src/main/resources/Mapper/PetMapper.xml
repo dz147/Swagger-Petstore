@@ -8,6 +8,10 @@
     <result column="photoUrls" jdbcType="VARCHAR" property="photoUrls" />
     <result column="tags" jdbcType="INTEGER" property="tags" />
     <result column="status" jdbcType="VARCHAR" property="status" />
+    <association property="categorys" column="category"
+                 select="com.dz147.dao.CategoryMapper.selectByPrimaryKey"/>
+    <association property="tag" column="tags"
+                 select="com.dz147.dao.TagMapper.selectByPrimaryKey"/>
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from pet

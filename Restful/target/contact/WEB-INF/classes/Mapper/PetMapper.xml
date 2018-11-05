@@ -8,19 +8,23 @@
     <result column="photoUrls" jdbcType="VARCHAR" property="photoUrls" />
     <result column="tags" jdbcType="INTEGER" property="tags" />
     <result column="status" jdbcType="VARCHAR" property="status" />
+    <association property="categorys" column="category"
+                 select="com.dz147.dao.CategoryMapper.selectByPrimaryKey"/>
+    <association property="tag" column="tags"
+                 select="com.dz147.dao.TagMapper.selectByPrimaryKey"/>
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from pet
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.dz147.entity.Pet">
-    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Integer">
+  <insert id="insert" parameterType="com.dz147.entity.Pet" useGeneratedKeys="true" keyColumn="id">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Integer" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into pet (id, category, name, 
+    insert into pet (category, name,
       photoUrls, tags, status
       )
-    values (#{id,jdbcType=INTEGER}, #{category,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+    values ( #{category,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
       #{photoUrls,jdbcType=VARCHAR}, #{tags,jdbcType=INTEGER}, #{status,jdbcType=VARCHAR}
       )
   </insert>
@@ -38,6 +42,11 @@
     from pet
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectByStatus" parameterType="java.lang.String" resultMap="BaseResultMap">
+  select id, category, name, photoUrls, tags, status
+  from pet
+  where status = #{status,jdbcType=VARCHAR}
+</select>
   <select id="selectAll" resultMap="BaseResultMap">
     select id, category, name, photoUrls, tags, status
     from pet
