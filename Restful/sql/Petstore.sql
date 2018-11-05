@@ -62,3 +62,24 @@ create table Orders
   status	VARCHAR(10),
   complete boolean default false
 );
+
+
+/*product()
+主键
+ID
+产品名称
+类型（外键）
+价格
+库存
+产品质量（外键）
+套餐（有默认值）
+版本（有默认值）
+颜色+图片（有默认值）
+详情
+评价
+
+版本表（id、版本名称、内存、价格、产品ID）
+套餐表（id、套餐名称、价格、产品ID）
+图片表（id、颜色、图片地址名称，产品ID）
+
+如果删除某个产品则多表连接删除即可。*/

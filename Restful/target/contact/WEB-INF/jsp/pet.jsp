@@ -53,8 +53,9 @@
 </table>
 <input type="button" value="添加" style="display: block;width: 100px;height: 40px; margin: 0 auto" id="addPet"/>
 
-<form action="/getByStatus/status" method="get">
-    <div style="margin: auto;text-align: center;">
+
+<div style="margin: auto;text-align: center;">
+    <form action="/getByStatus/status" method="get">
         <br/><br/><br/>
         <label for="state">查询宠物状态</label>
         <select name="status" id="state">
@@ -62,11 +63,19 @@
             <option value="预定">预定</option>
             <option value="已售">已售</option>
         </select>
-
         <input type="submit" value="查询"/>
-    </div>
-</form>
+    </form>
+    <br/>
+    <label for="ID">通过ID查找宠物
+        <input type="number" name="id" id="ID"/>
+    </label>
+    <input type="button" value="查询" id="bnt"/>
+    <br/><br/>
+</div>
 
+<div id="getPetById">
+
+</div>
 <table border="0px" align="center" width="60%" bordercolor="#E2E2E2">
     <thead>
     <th>宠物编号</th>
@@ -86,7 +95,7 @@
             <td>${pet.tag.name}</td>
             <td>${pet.status}</td>
             <td><a class="del" href="#" onclick="del(${pet.id})">删除</a></td>
-            <td><a href="/getPetById/${pet.id}">修改</a></td>
+            <td><a href="/getPetId/${pet.id}">修改</a></td>
         </tr>
     </c:forEach>
     </tbody>
@@ -107,7 +116,24 @@
     }
 
     $(function () {
-
+        $("#bnt").click(function () {
+            var id = $("#ID").val();
+            $.ajax({
+                url: "/getPetById/" + id + "",
+                type: "get"
+            }).done(function (data) {
+                $("#getPetById").empty();
+                var ui = "<ui>\n" +
+                    "        <li>"+data.id+"</li>\n" +
+                    "        <li>"+data.categorys.name+"</li>\n" +
+                    "        <li>"+data.name+"</li>\n" +
+                    "        <li><a href='"+data.photoUrls+"'>图片链接</a></li>\n" +
+                    "        <li>"+data.tag.name+"</li>\n" +
+                    "        <li>"+data.status+"</li>\n" +
+                    "    </ui>";
+                $("#getPetById").append(ui);
+            })
+        });
     });
     $("#addPet").click(function () {
         $.post({

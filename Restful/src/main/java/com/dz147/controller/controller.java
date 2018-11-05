@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -69,10 +70,17 @@ public class controller {
     }
 
     //通过ID查找宠物
-    @RequestMapping(value = "/getPetById/{id}", method = RequestMethod.GET)
-    public String getPetById(Model model, @PathVariable("id") int id) {
+    @RequestMapping(value = "/getPetById/{id}", method = RequestMethod.GET,produces = "application/json;charset=utf-8")
+    public @ResponseBody Pet getPetById(Model model, @PathVariable("id") int id) {
         Pet pet = petMapper.selectByPrimaryKey(id);
-        model.addAttribute("pets", pet);
+        return pet;
+    }
+
+    //通过ID查找宠物
+    @RequestMapping(value = "/getPetId/{id}", method = RequestMethod.GET,produces = "application/json;charset=utf-8")
+    public String getPet(Model model, @PathVariable("id") int id) {
+        Pet pet = petMapper.selectByPrimaryKey(id);
+        model.addAttribute("pets",pet);
         return "pet_Update";
     }
 
@@ -86,7 +94,7 @@ public class controller {
 
 
     //删除一个宠物
-    @RequestMapping(value = "/delPet/{id}", method = RequestMethod.DELETE,produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/delPet/{id}", method = RequestMethod.DELETE, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String getDeleteById(Model model, @PathVariable("id") int id) {
         petMapper.deleteByPrimaryKey(id);
